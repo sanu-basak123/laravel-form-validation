@@ -1,26 +1,24 @@
 "use strict";
 
-var url = '';
+var requestURL = '';
+
+var constraints = {};
 
  
-var fetchRequest=function(url){
+var fetchRequest=function(requestURL){
 
-  var constructed_url=url;
+  var constructed_url=requestURL;
 
   var headers=new Headers();
 
   headers.append("X-Requested-With", "XMLHttpRequest");
-  
-  headers.append("X-XSRF-TOKEN", document.querySelector('meta[name="csrf-token"]').content);
-
+    
   var params={
       headers:headers,
       credentials: 'same-origin',
       cache: 'no-cache'
   };
 
-  var searchParams=new URLSearchParams();
- 
   return {
       post:function(){
           params.method='POST';
@@ -28,9 +26,6 @@ var fetchRequest=function(url){
       },
       setBody:function(body){
           params.body=body;
-      },
-      setSearchParams:function(key,value){
-          searchParams.set(key,value);
       },
       setHeaders:function(key,value){
           headers.append(key,value);
@@ -40,18 +35,16 @@ var fetchRequest=function(url){
 
 var formSubmitJS = {
    
-
     form :{} ,
 
     setForm : function(f){
        return this.form = f;
     },
 
-    submit : function(event,constraints){
+    submit : function(event){
 
         event.preventDefault();
         
-
         if(event.target instanceof HTMLFormElement)
           this.setForm(event.target)
            
@@ -66,9 +59,11 @@ var formSubmitJS = {
       that.request();
           
     },
-
+ 
     onError : function(errors){
+
         var formInput =  that.form.querySelectorAll("input[name], select[name]");
+    
         if (errors instanceof Error) {
             console.err("An error ocurred", errors);
         } else {
@@ -79,10 +74,10 @@ var formSubmitJS = {
     },
 
     showErrorsForInput : function(input, errors){
-
+        
           var formGroup = this.closestParent(input.parentNode, "form-group"),
-          messages = formGroup.querySelector(".messages");
-
+          messages = formGroup.querySelector(".col-sm-8");
+        
           this.resetFormGroup(formGroup);
 
           if (errors) {
@@ -111,7 +106,7 @@ var formSubmitJS = {
     },
 
     closestParent : function(child,className){
-
+          
           if (!child || child == document) {
             return null;
           }
@@ -123,6 +118,7 @@ var formSubmitJS = {
     },
 
     addError : function(messages,error){
+
           var block = document.createElement("span");
           block.classList.add("help-block");
           block.classList.add("error");
@@ -133,7 +129,7 @@ var formSubmitJS = {
 
     request : function(){
 
-        var formSubmit = fetchRequest(url);
+        var formSubmit = fetchRequest(requestURL);
         var formData = new FormData(this.form);
         formSubmit.setBody(formData);
     
@@ -145,6 +141,7 @@ var formSubmitJS = {
             response.json().then((errors) => {
               if(errors.errors){    
                 
+                that.onError(errors.errors);
               }
             });
           }

@@ -12,15 +12,14 @@
             <div class="card">
                 <div class="card-header">{{ __('Register') }}</div>
                 <div class="card-body">
-                    <form class="form-horizontal" novalidate onsubmit="formSubmitJS.submit(event,constraints,url);">
+                    <form class="form-horizontal" novalidate onsubmit="formSubmitJS.submit(event);">
                         <div class="form-group">
                             <input type="hidden" name="_token" id="csrf-token" value="{{ Session::token() }}" />
-
                             <label class="col-sm-4 control-label" for="email">Username</label>
                             <div class="col-sm-8">
                                 <input id="username" class="form-control" type="text" placeholder="username" name="username">
                             </div>
-                            <div class="col-sm-5 messages" id="username-error"></div>
+                            
                         </div>
 
                         <div class="form-group">
@@ -28,7 +27,7 @@
                             <div class="col-sm-8">
                                 <input id="first_name" class="form-control" type="text" placeholder="first_name" name="first_name">
                             </div>
-                            <div class="col-sm-5 messages" id="first_name-error"></div>
+                          
                         </div>
 
                         <div class="form-group">
@@ -37,7 +36,7 @@
                                 <input id="last_name" class="form-control" type="text" placeholder="last_name"
                                     name="last_name">
                             </div>
-                            <div class="col-sm-5 messages" id="last_name-error"></div>
+                           
                         </div>
 
             
@@ -58,23 +57,23 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/validate.js/0.12.0/validate.min.js"></script>
 <script src="{{ asset('js/formsubmit.js')}}"></script>
 <script>
-    var url = '/form1';
+    var requestURL = '/form1';
     var constraints = {
-        // username: {
-        //     presence: true,
-        // },
-        // first_name: {
-        //     presence: true,
-        //     length: {
-        //         minimum: 5
-        //     }
-        // },
-        // last_name: {
-        //     presence: true,
-        //     length: {
-        //         minimum: 5
-        //     }
-        // },
+        username: {
+            presence: true,
+        },
+        first_name: {
+            presence: true,
+            length: {
+                minimum: 5
+            }
+        },
+        last_name: {
+            presence: true,
+            length: {
+                minimum: 5
+            }
+        },
 
 
     };
